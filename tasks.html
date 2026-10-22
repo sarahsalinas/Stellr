@@ -29,27 +29,36 @@
         </header>
         <main>
             <button id="newTask">NEW +</button>
-            <dialog>
-                <form method="dialog">
-                    <input type="text" id="taskName" name="taskName" value="Task name...">
-                    <input type="date" id="taskDate" name="taskDate" value="Date">
+            <dialog id="newTaskDialogBox">
+                <form>
+                    <button type="button" id="closeButton" aria-label="close task form">x</button>
+                    <label for="taskName">Task name</label>
+                    <input type="text" id="taskName" name="taskName" placeholder="Task name..." required>
+                    <label for="taskDate">Date</label>
+                    <input type="date" id="taskDate" name="taskDate" required>
+                    <label for="recurring">Recurring</label>
                     <select name="recurring" id="recurring">
+                        <option value="None">None</option>
                         <option value="Daily">Daily</option>
                         <option value="Weekly">Weekly</option>
                         <option value="Monthly">Monthly</option>
                       </select>
                     <input type="submit" value="Create Task">
+                    <input type="button" id="cancelButton" value="Cancel">
                 </form>
             </dialog>
             <section id="tasksContainer">
                 <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Due</th>
-                    <th>Progress</th>    
-                </tr>
-                <tr>
-                </tr>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Due</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
                 </table>
             </section>
         </main>
