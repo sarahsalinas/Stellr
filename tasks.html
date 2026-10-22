@@ -13,6 +13,9 @@
     </head>
     <body>
         <header>
+            <!-- placeholder image, change size in css later -->
+            <img src="images/froggie.png" alt="placeholder image of frog" width="40">
+            <button id="reset">Reset</button>
             <nav>
                 <!-- navigation with working links -->
                 <ul>
@@ -22,8 +25,33 @@
                 </ul>
             </nav>
            <h1> tasks</h1>
+           <img src="images/froggie.png" alt="placeholder image of frog" width="100">
         </header>
         <main>
+            <button id="newTask">NEW +</button>
+            <dialog>
+                <form method="dialog">
+                    <input type="text" id="taskName" name="taskName" value="Task name...">
+                    <input type="date" id="taskDate" name="taskDate" value="Date">
+                    <select name="recurring" id="recurring">
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                      </select>
+                    <input type="submit" value="Create Task">
+                </form>
+            </dialog>
+            <section id="tasksContainer">
+                <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Due</th>
+                    <th>Progress</th>    
+                </tr>
+                <tr>
+                </tr>
+                </table>
+            </section>
         </main>
         <footer>
             <p>&copy; Stellr made by Sarah Salinas</p>

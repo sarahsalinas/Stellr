@@ -13,7 +13,11 @@
     </head>
     <body>
         <header>
-           <h1>Welcome, </h1>
+            <!-- placeholder image, change size in css later -->
+           <img src="images/froggie.png" alt="placeholder image of frog" width="40">
+           <button id="reset">Reset</button>
+           <h1 id="pageGreeting">Welcome, </h1>
+           <img src="images/froggie.png" alt="placeholder image of frog" width="100">
            <nav>
             <!-- navigation with working links -->
             <ul>
@@ -24,8 +28,15 @@
            </nav>
         </header>
         <main>
-            <p id="#noTasks">No upcoming tasks...</p>
-            <button id="#createOne">create one?</button>
+            <section id="dashboardContainer">
+                <div id="noTasks">
+                    <p>No upcoming tasks...</p>
+                    <a href="tasks.html" id="createOne">create one?</a>
+                </div>
+                <div id="upcomingTasks">
+
+                </div>
+            </section>
         </main>
         <footer>
             <p>&copy; Stellr made by Sarah Salinas</p>
