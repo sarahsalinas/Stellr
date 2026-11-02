@@ -28,6 +28,7 @@
            <img src="images/froggie.png" alt="placeholder image of frog" width="100">
         </header>
         <main>
+            <!-- NEW TASK -->
             <button id="newTask">NEW +</button>
             <dialog id="newTaskDialogBox">
                 <form>
@@ -47,6 +48,62 @@
                     <input type="button" id="cancelButton" value="Cancel">
                 </form>
             </dialog>
+            <!-- FOCUS TIMER DIALOG BOX -->
+            <dialog id="focusDialogBox">
+                <form>
+                    <button type="button" id="closeFocusButtonDialog" aria-label="close focus form">x</button>
+                    <h2>Focus Mode</h2>
+                    <p id="focusModeTaskName"></p>
+                    <label for="focusLength">Focus for:</label>
+                    <select name="focusLength" id="focusLength">
+                        <option value="15">15 minutes</option>
+                        <option value="30">30 minutes</option>
+                        <option value="60">1 hour</option>
+                        <option value="120">2 hours</option>
+                        <option value="240">4 hours</option>
+                      </select>
+                    <input type="submit" value="Start!">
+                    <input type="button" id="focusCancelButton" value="Cancel">
+                </form>
+            </dialog>
+            <!-- FOCUS TIMER SESSION BEGINS, INITIALLY HIDDEN -->
+            <section id="focusTimer" hidden>
+                <button type="button" id="closeFocusButton" aria-label="end focus timer session">x</button>
+                <img src="images/froggie.png" alt="placeholder image of frog" width="440" height="220">
+                <p>Time left for:</p>
+                <p id="focusTimerTaskName"></p>
+                <p id="timerCountDown">15:00</p>
+                <button type="button" id="pause" aria-label="pause focus timer">Pause</button>
+                <button type="button" id="end" aria-label="end focus timer">End</button>
+                <button type="button" id="addTime" aria-label="add more time to focus timer">Add Time</button>
+                <dialog id="addTimeBox">
+                    <form>
+                        <!-- ADD MORE TIME OPTION -->
+                        <label for="addTimeAmount">Amount: </label>
+                        <select name="addTimeAmount" id="addTimeAmount">
+                            <option value="15">15 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="60">1 hour</option>
+                            <option value="120">2 hours</option>
+                            <option value="240">4 hours</option>
+                        </select>
+                        <input type="submit" value="Add Time">
+                        <input type="button" id="addTimeCancelButton" value="Cancel">
+                    </form>
+                </dialog>
+            </section>
+            <!-- FINISHED FOCUS MODE DIALOG -->
+            <dialog id="completeTaskDialog">
+                <button type="button" id="closeFinishedFocusButton" aria-label="close finished focused session">x</button>
+                <h3>Good Job!</h3>
+                <p>Elapsed time: </p>
+                <p id="elapsedTime"></p>
+                <p>Total time spent on</p>
+                <p id="completeFocusTask"></p>
+                <p id="totalTimeSpent"></p>
+                <input type="button" id="closeFinishedFocusButton2" value="Close">
+            </dialog>
+            <!-- TASKS CREATED -->
             <section id="tasksContainer">
                 <table>
                     <thead>
