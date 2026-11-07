@@ -7,6 +7,7 @@ const newTaskDialog = document.getElementById("newTaskDialogBox");
 // when new task button is clicked it will open dialog box
 newTaskButton.addEventListener("click", function(){
     newTaskDialog.showModal();
+    editingTask = null;
 });
 
 
@@ -31,6 +32,8 @@ const loadedTasks = JSON.parse(savedTasks) || [];
 // array for tasks to go into
 const tasks = loadedTasks;
 
+let editingTask = null;
+
 // retrieve task name
 const taskNameInput = document.getElementById("taskName");
 
@@ -50,11 +53,35 @@ function displayTask(task) {
     // creates new table row and table data
     const taskRow = document.createElement("tr");
     const taskNameCell = document.createElement("td");
+    const taskDateCell = document.createElement("td");
+    const taskRecurringCell = document.createElement("td");
+    // cell to hold edit button
+    const taskActionsCell = document.createElement("td");
+    // edit button
+    const editButton = document.createElement("button");
     // places new row inside table body
     taskNameCell.textContent = task.name;
+    taskDateCell.textContent = task.date;
+    taskRecurringCell.textContent = task.recurring;
+    editButton.textContent = "Edit";
     taskRow.appendChild(taskNameCell);
+    taskRow.appendChild(taskDateCell);
+    taskRow.appendChild(taskRecurringCell);
+    taskActionsCell.appendChild(editButton);
+    taskRow.appendChild(taskActionsCell);
+
     taskTableBody.appendChild(taskRow);
-}
+
+    // when edit button is clicked
+    editButton.addEventListener("click", function(){
+        console.log(task.name);
+        newTaskDialog.showModal();
+        taskNameInput.value = task.name;
+        taskDateInput.value = task.date;
+        recurringInput.value = task.recurring;
+        editingTask = task;
+    });
+};
 
 newTaskForm.addEventListener("submit", function(event){
     // no reloading
@@ -70,13 +97,17 @@ newTaskForm.addEventListener("submit", function(event){
         recurring: recurring
     };
 
-    displayTask(newTask);
-
-    // placing new task into tasks array
-    tasks.push(newTask);
-
-    // convert array into a string so it can save to localStorage
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    if (editingTask !== null){
+        editingTask.name = taskName;
+        editingTask.date = taskDate;
+        editingTask.recurring = recurring;
+    }
+    else {
+        // placing new task into tasks array
+        tasks.push(newTask);
+        // convert array into a string so it can save to localStorage
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    };
     // close the dialog after submitting
     newTaskDialog.close();
     newTaskForm.reset();
