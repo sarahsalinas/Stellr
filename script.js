@@ -46,6 +46,8 @@ const recurringInput = document.getElementById("recurring");
 // detect when user submits form
 const newTaskForm = document.getElementById("newTaskForm");
 
+// finds the tables body
+const taskTableBody = document.querySelector("tbody");
 
 // function for displaying tasks
 function displayTask(task) {
@@ -105,18 +107,26 @@ newTaskForm.addEventListener("submit", function(event){
     else {
         // placing new task into tasks array
         tasks.push(newTask);
-        // convert array into a string so it can save to localStorage
-        localStorage.setItem("tasks", JSON.stringify(tasks));
     };
+
+    // convert array into a string so it can save to localStorage
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    // clears and rebuilds the table
+    refreshTasks();
     // close the dialog after submitting
     newTaskDialog.close();
     newTaskForm.reset();
 });
 
+function refreshTasks(){
+    // clear the table
+    taskTableBody.innerHTML = "";
 
-// finds the table's body
-const taskTableBody = document.querySelector("tbody");
+    // finds the table's body
+    tasks.forEach(function(task){
+        displayTask(task);
+    });
+}
 
-tasks.forEach(function(task){
-    displayTask(task);
-});
+// reloads
+refreshTasks();
