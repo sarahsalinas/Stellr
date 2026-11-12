@@ -16,6 +16,7 @@ deleteTaskButton.addEventListener("click", function(){
 // when new task button is clicked it will open dialog box
 newTaskButton.addEventListener("click", function(){
     newTaskDialog.showModal();
+    submitTaskButton.value = "Create Task"
     editingTask = null;
     deleteTaskButton.hidden = true;
     newTaskForm.reset();
@@ -44,6 +45,9 @@ deleteTaskButtonConfirm.addEventListener("click", function(){
         editingTask = null;
     }
 });
+
+// submit task button
+submitTaskButton = document.getElementById("submitTaskButton");
 
 // close dialog box when "x" or cancel is clicked
 const closeDialogButton = document.getElementById("closeButton");
@@ -112,6 +116,7 @@ function displayTask(task) {
     editButton.addEventListener("click", function(){
         console.log(task.name);
         newTaskDialog.showModal();
+        submitTaskButton.value = "Save Changes"
         taskNameInput.value = task.name;
         taskDateInput.value = task.date;
         recurringInput.value = task.recurring;
