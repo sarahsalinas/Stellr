@@ -4,12 +4,46 @@ const newTaskButton = document.getElementById("newTask");
 
 const newTaskDialog = document.getElementById("newTaskDialogBox");
 
+// delete button
+const deleteTaskButton = document.getElementById("deleteTaskButton");
+
+const deleteConfirmDialog = document.getElementById("deleteConfirmDialog");
+
+deleteTaskButton.addEventListener("click", function(){
+    deleteConfirmDialog.showModal();
+});
+
 // when new task button is clicked it will open dialog box
 newTaskButton.addEventListener("click", function(){
     newTaskDialog.showModal();
     editingTask = null;
+    deleteTaskButton.hidden = true;
+    newTaskForm.reset();
 });
 
+// cancel delete button
+const cancelDeleteTaskButton = document.getElementById("cancelDeleteTaskButton");
+
+cancelDeleteTaskButton.addEventListener("click", function(){
+    deleteConfirmDialog.close();
+});
+
+// actually delete task
+const deleteTaskButtonConfirm = document.getElementById("deleteTaskButtonConfirm");
+
+deleteTaskButtonConfirm.addEventListener("click", function(){
+    let taskIndex = tasks.indexOf(editingTask);
+    if (taskIndex !== -1) {
+        tasks.splice(taskIndex, 1);
+        // convert array into a string so it can save to localStorage
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        // reloads
+        refreshTasks();
+        deleteConfirmDialog.close();
+        newTaskDialog.close();
+        editingTask = null;
+    }
+});
 
 // close dialog box when "x" or cancel is clicked
 const closeDialogButton = document.getElementById("closeButton");
@@ -82,6 +116,7 @@ function displayTask(task) {
         taskDateInput.value = task.date;
         recurringInput.value = task.recurring;
         editingTask = task;
+        deleteTaskButton.hidden = false;
     });
 };
 

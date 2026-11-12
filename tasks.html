@@ -46,7 +46,15 @@
                       </select>
                     <input type="submit" value="Create Task">
                     <input type="button" id="cancelButton" value="Cancel">
+                    <button type="button" id="deleteTaskButton" aria-label="delete task" hidden>Delete Task</button>
                 </form>
+            </dialog>
+            <!-- delete confirmation dialog box -->
+            <dialog id="deleteConfirmDialog">
+                <h1>Delete Task?</h1>
+                <p>This cannot be undone!</p>
+                <button type="button" id="deleteTaskButtonConfirm">Delete Task</button>
+                <button type="button" id="cancelDeleteTaskButton">Cancel</button>
             </dialog>
             <!-- FOCUS TIMER DIALOG BOX -->
             <dialog id="focusDialogBox">
