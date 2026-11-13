@@ -4,6 +4,10 @@ const newTaskButton = document.getElementById("newTask");
 
 const newTaskDialog = document.getElementById("newTaskDialogBox");
 
+// focus dialog box
+const focusDialogBox = document.getElementById("focusDialogBox");
+const focusModeTaskName = document.getElementById("focusModeTaskName");
+
 // delete button
 const deleteTaskButton = document.getElementById("deleteTaskButton");
 
@@ -47,7 +51,7 @@ deleteTaskButtonConfirm.addEventListener("click", function(){
 });
 
 // submit task button
-submitTaskButton = document.getElementById("submitTaskButton");
+const submitTaskButton = document.getElementById("submitTaskButton");
 
 // close dialog box when "x" or cancel is clicked
 const closeDialogButton = document.getElementById("closeButton");
@@ -61,6 +65,57 @@ cancelDialogButton.addEventListener("click", function(){
     newTaskDialog.close();
 });
 
+// close focus dialog box when "x" or cancel is clicked
+const closeFocusButtonDialog = document.getElementById("closeFocusButtonDialog");
+const focusCancelButton = document.getElementById("focusCancelButton");
+
+closeFocusButtonDialog.addEventListener("click", function(){
+    focusDialogBox.close();
+});
+
+focusCancelButton.addEventListener("click", function(){
+    focusDialogBox.close();
+});
+
+// when start is clicked on focus dialog box
+const focusForm = document.getElementById("focusForm");
+const focusTimerTaskName = document.getElementById("focusTimerTaskName");
+
+focusForm.addEventListener("submit", function(event){
+    event.preventDefault();
+    // focusTimerTaskName.textContent = task.name;
+    const focusLengthInput = document.getElementById("focusLength");
+    const timerCountDown = document.getElementById("timerCountDown");
+    // store selected duration
+    const focusMinutes = focusLengthInput.value;
+    // converts string to a number
+    const timerLength = Number(focusMinutes);
+    // multiply by 60 because javascript uses seconds
+    let timeRemaining = timerLength * 60;
+    focusDialogBox.close();
+    // 3600 seconds in an hour, using math.floor to calculate the amount of hours so time can display as 1:00:00
+    const hours = Math.floor(timeRemaining / 3600);
+    // find leftover seconds
+    const leftoverSeconds = timeRemaining % 3600;
+    // convert seconds into minutes
+    const minutes = Math.floor(leftoverSeconds / 60);
+    // last bit of seconds remainder
+    const seconds = timeRemaining % 60;
+    // format minutes and seconds to display a 0 in front of single digit numbers
+    const formattedMinutes = String(minutes).padStart(2, "0");
+    const formattedSeconds = String(seconds).padStart(2, "0");
+    if (hours > 0) {
+        timerCountDown.textContent = `${hours}:${formattedMinutes}:${formattedSeconds}`;
+    }
+    else {
+        timerCountDown.textContent = `${formattedMinutes}:${formattedSeconds}`;
+    }
+    // timer section becomes visible
+    const focusTimer = document.getElementById("focusTimer");
+    focusTimer.hidden = false;
+    // make the timer go down
+    
+});
 
 
 // place string into savedTasks
@@ -71,6 +126,7 @@ const loadedTasks = JSON.parse(savedTasks) || [];
 const tasks = loadedTasks;
 
 let editingTask = null;
+let focusingTask = null;
 
 // retrieve task name
 const taskNameInput = document.getElementById("taskName");
@@ -99,15 +155,22 @@ function displayTask(task) {
     const taskActionsCell = document.createElement("td");
     // edit button
     const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    // focus button
+    const focusButton = document.createElement("button");
+    focusButton.textContent = "Focus";
     // places new row inside table body
     taskNameCell.textContent = task.name;
-    taskDateCell.textContent = task.date;
+    // changing date format
+    const dateParts = task.date.split("-");
+    const formattedDate = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
+    taskDateCell.textContent = formattedDate;
     taskRecurringCell.textContent = task.recurring;
-    editButton.textContent = "Edit";
     taskRow.appendChild(taskNameCell);
     taskRow.appendChild(taskDateCell);
     taskRow.appendChild(taskRecurringCell);
     taskActionsCell.appendChild(editButton);
+    taskActionsCell.appendChild(focusButton);
     taskRow.appendChild(taskActionsCell);
 
     taskTableBody.appendChild(taskRow);
@@ -122,6 +185,13 @@ function displayTask(task) {
         recurringInput.value = task.recurring;
         editingTask = task;
         deleteTaskButton.hidden = false;
+    });
+
+    // when focus button is clicked
+    focusButton.addEventListener("click", function(){
+        focusDialogBox.showModal();
+        focusingTask = task;
+        focusModeTaskName.textContent = task.name;
     });
 };
 
@@ -161,6 +231,10 @@ newTaskForm.addEventListener("submit", function(event){
 function refreshTasks(){
     // clear the table
     taskTableBody.innerHTML = "";
+    // sorts tasks into earliest date first
+    tasks.sort(function(a, b){
+        return a.date.localeCompare(b.date);
+    });
 
     // finds the table's body
     tasks.forEach(function(task){
