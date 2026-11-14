@@ -80,41 +80,157 @@ focusCancelButton.addEventListener("click", function(){
 // when start is clicked on focus dialog box
 const focusForm = document.getElementById("focusForm");
 const focusTimerTaskName = document.getElementById("focusTimerTaskName");
+let timeRemaining = 0;
+let timerInterval = null;
+const timerCountDown = document.getElementById("timerCountDown");
+let initialTime = 0;
 
 focusForm.addEventListener("submit", function(event){
     event.preventDefault();
     // focusTimerTaskName.textContent = task.name;
     const focusLengthInput = document.getElementById("focusLength");
-    const timerCountDown = document.getElementById("timerCountDown");
     // store selected duration
     const focusMinutes = focusLengthInput.value;
     // converts string to a number
     const timerLength = Number(focusMinutes);
     // multiply by 60 because javascript uses seconds
-    let timeRemaining = timerLength * 60;
+    timeRemaining = timerLength * 60;
+    initialTime = timeRemaining;
+    updateTimerDisplay();
     focusDialogBox.close();
-    // 3600 seconds in an hour, using math.floor to calculate the amount of hours so time can display as 1:00:00
-    const hours = Math.floor(timeRemaining / 3600);
-    // find leftover seconds
-    const leftoverSeconds = timeRemaining % 3600;
-    // convert seconds into minutes
-    const minutes = Math.floor(leftoverSeconds / 60);
-    // last bit of seconds remainder
-    const seconds = timeRemaining % 60;
-    // format minutes and seconds to display a 0 in front of single digit numbers
-    const formattedMinutes = String(minutes).padStart(2, "0");
-    const formattedSeconds = String(seconds).padStart(2, "0");
-    if (hours > 0) {
-        timerCountDown.textContent = `${hours}:${formattedMinutes}:${formattedSeconds}`;
-    }
-    else {
-        timerCountDown.textContent = `${formattedMinutes}:${formattedSeconds}`;
-    }
     // timer section becomes visible
     const focusTimer = document.getElementById("focusTimer");
     focusTimer.hidden = false;
     // make the timer go down
-    
+    startTimer();
+});
+
+// reusable function for start and resume button
+function startTimer() {
+    // stop any existing interval
+    clearInterval(timerInterval);
+    // make the timer go down
+    timerInterval = setInterval(function(){
+    // stops time from counting down past 0
+    if (timeRemaining <= 0) {
+        clearInterval(timerInterval);
+        endButton.click();
+    }
+    else {
+        timeRemaining--;
+        updateTimerDisplay();
+    }
+    }, 1000);
+};
+
+// reusable function for formatting timer calculations
+function updateTimerDisplay() {
+     // 3600 seconds in an hour, using math.floor to calculate the amount of hours so time can display as 1:00:00
+     const hours = Math.floor(timeRemaining / 3600);
+     // find leftover seconds
+     const leftoverSeconds = timeRemaining % 3600;
+     // convert seconds into minutes
+     const minutes = Math.floor(leftoverSeconds / 60);
+     // last bit of seconds remainder
+     const seconds = timeRemaining % 60;
+     // format minutes and seconds to display a 0 in front of single digit numbers
+     const formattedMinutes = String(minutes).padStart(2, "0");
+     const formattedSeconds = String(seconds).padStart(2, "0");
+     if (hours > 0) {
+         timerCountDown.textContent = `${hours}:${formattedMinutes}:${formattedSeconds}`;
+     }
+     else {
+         timerCountDown.textContent = `${formattedMinutes}:${formattedSeconds}`;
+     }
+};
+
+// pause button
+const pauseButton = document.getElementById("pause");
+
+pauseButton.addEventListener("click", function(){
+    if (pauseButton.textContent === "Pause") {
+        clearInterval(timerInterval);
+        // change button to say Resume
+        pauseButton.textContent = "Resume";
+    }
+    else {
+        startTimer();
+        pauseButton.textContent = "Pause";
+    }
+});
+
+// end button
+const endButton = document.getElementById("end");
+const completeTaskDialog = document.getElementById("completeTaskDialog");
+const elapsedTime = document.getElementById("elapsedTime");
+const totalTimeSpent = document.getElementById("totalTimeSpent");
+
+endButton.addEventListener("click", function(){
+    // stop timer
+    clearInterval(timerInterval);
+    // hide focus timer
+    focusTimer.hidden = true;
+    // calculate time focused
+    const elapsedSeconds = initialTime - timeRemaining;
+    const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+    const elapsedRemainingSeconds = elapsedSeconds % 60;
+    const formattedElapsedSeconds = String(elapsedRemainingSeconds).padStart(2, "0");
+    elapsedTime.textContent = `${elapsedMinutes}:${formattedElapsedSeconds}`;
+    focusingTask.totalFocusTime = focusingTask.totalFocusTime ?? 0;
+    // adding time elapsed to totalFocusTime
+    focusingTask.totalFocusTime += elapsedSeconds;
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    const totalMinutes = Math.floor(focusingTask.totalFocusTime / 60);
+    const totalRemainingSeconds = focusingTask.totalFocusTime % 60;
+    const formattedTotalSeconds = String(totalRemainingSeconds).padStart(2, "0");
+    totalTimeSpent.textContent = `${totalMinutes}:${formattedTotalSeconds}`;
+    // show complete focus dialog box
+    completeTaskDialog.showModal();
+    const completeFocusTask = document.getElementById("completeFocusTask");
+    completeFocusTask.textContent = focusingTask.name;
+});
+
+// close timer dialog box when "x" or close is clicked
+const closeFinishedFocusButton = document.getElementById("closeFinishedFocusButton");
+const closeFinishedFocusButton2 = document.getElementById("closeFinishedFocusButton2");
+
+closeFinishedFocusButton.addEventListener("click", function(){
+    completeTaskDialog.close();
+});
+
+closeFinishedFocusButton2.addEventListener("click", function(){
+    completeTaskDialog.close();
+});
+
+// add time button
+const addTime = document.getElementById("addTime");
+const addTimeBox = document.getElementById("addTimeBox");
+const addTimeForm = document.getElementById("addTimeForm");
+
+addTime.addEventListener("click", function(){
+    addTimeBox.showModal();
+});
+
+// add time cancel button
+const addTimeCancelButton = document.getElementById("addTimeCancelButton");
+
+addTimeCancelButton.addEventListener("click", function(){
+    addTimeBox.close();
+});
+
+// add time form
+addTimeForm.addEventListener("submit", function(event){
+    event.preventDefault();
+    const addTimeAmount = document.getElementById("addTimeAmount");
+    const additionalMinutes = Number(addTimeAmount.value);
+    const additionalSeconds = additionalMinutes * 60;
+    // adds time selected to timer
+    timeRemaining += additionalSeconds;
+    // update initial time as well so the timer wont reflect that you spent an inaccurate amount of time
+    initialTime += additionalSeconds;
+    // use function to update timer
+    updateTimerDisplay();
+    addTimeBox.close();
 });
 
 
@@ -206,7 +322,8 @@ newTaskForm.addEventListener("submit", function(event){
     const newTask = {
         name: taskName,
         date: taskDate,
-        recurring: recurring
+        recurring: recurring,
+        totalFocusTime: 0
     };
 
     if (editingTask !== null){
