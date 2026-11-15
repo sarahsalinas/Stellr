@@ -96,6 +96,13 @@ focusForm.addEventListener("submit", function(event){
     // converts string to a number
     const timerLength = Number(focusMinutes);
     // multiply by 60 because javascript uses seconds
+    /* 
+    
+    TEST CODE to MAKE TIMER BE JUST 1 MINUTE LONG 
+    DELETE LATER
+    
+    */
+    //  timeRemaining = 60;
     timeRemaining = timerLength * 60;
     initialTime = timeRemaining;
     updateTimerDisplay();
@@ -293,6 +300,9 @@ function displayTask(task) {
     // focus button
     const focusButton = document.createElement("button");
     focusButton.textContent = "Focus";
+    // complete button
+    const completeButton = document.createElement("button");
+    completeButton.textContent = "Complete";
     // places new row inside table body
     taskNameCell.textContent = task.name;
     // places focus time spent into taskFocusCell with proper formatting using formatTime()
@@ -308,6 +318,7 @@ function displayTask(task) {
     taskNameCell.appendChild(editButton);
     // focus button in progress column
     taskFocusCell.appendChild(focusButton);
+    taskFocusCell.appendChild(completeButton);
     taskTableBody.appendChild(taskRow);
 
     // when edit button is clicked
