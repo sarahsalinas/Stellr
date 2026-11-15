@@ -262,7 +262,7 @@ addTimeForm.addEventListener("submit", function(event){
 const savedTasks = localStorage.getItem("tasks");
 // place savedTasks back into an array and includes OR operator so it doesn't return null
 const loadedTasks = JSON.parse(savedTasks) || [];
-// array for tasks to go into
+// readability
 const tasks = loadedTasks;
 
 let editingTask = null;
@@ -339,6 +339,16 @@ function displayTask(task) {
         focusingTask = task;
         focusModeTaskName.textContent = task.name;
     });
+
+    // when complete button is clicked
+    completeButton.addEventListener("click", function(){
+        // sets whether it is completed to true
+        task.completed = true;
+        // saves updated task array to local storage
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        // refreshes page and now shows incomplete tasks
+        refreshTasks();
+    });
 };
 
 newTaskForm.addEventListener("submit", function(event){
@@ -353,7 +363,8 @@ newTaskForm.addEventListener("submit", function(event){
         name: taskName,
         date: taskDate,
         recurring: recurring,
-        totalFocusTime: 0
+        totalFocusTime: 0,
+        completed: false
     };
 
     if (editingTask !== null){
@@ -385,7 +396,9 @@ function refreshTasks(){
 
     // finds the table's body
     tasks.forEach(function(task){
-        displayTask(task);
+        if (!task.completed) {
+            displayTask(task);
+        };
     });
 }
 
