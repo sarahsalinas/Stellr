@@ -112,22 +112,28 @@ focusForm.addEventListener("submit", function(event){
 function startTimer() {
     // stop any existing interval
     clearInterval(timerInterval);
+    // stores when timer was started or resumed into startTime ** Date.now gives milliseconds
+    const startTime = Date.now();
+    // stores how much time was left when startTimer was called
+    const startTimeRemaining = timeRemaining;
     // make the timer go down
     timerInterval = setInterval(function(){
+        // stores what time it is now in currentTime
+        const currentTime = Date.now();
+        // calculate time passed and store into elapsed seconds (1000 used to convert milliseconds into seconds)
+        const elapsedSeconds = (currentTime - startTime) / 1000;
+        // update the countdown, rounds remaining seconds to whole number using Math.ceil, and prevents remaining time from being negative using Math.max
+        timeRemaining = Math.max(0, Math.ceil(startTimeRemaining - elapsedSeconds));
+        updateTimerDisplay();
         // stops time from counting down past 0
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
             endButton.click();
         }
-        else {
-            timeRemaining--;
-            updateTimerDisplay();
-        }
     }, 1000);
 };
 
 // function for time formatting calculations
-
 function formatTime(seconds) {
     // 3600 seconds in 1 hour
     const hours = Math.floor(seconds / 3600);
@@ -187,6 +193,8 @@ endButton.addEventListener("click", function(){
     // adding time elapsed to totalFocusTime
     focusingTask.totalFocusTime += elapsedSeconds;
     localStorage.setItem("tasks", JSON.stringify(tasks));
+    // refresh to update task data
+    refreshTasks();
     // using formatTime() to properly display total time spent
     totalTimeSpent.textContent = formatTime(focusingTask.totalFocusTime);
     // show complete focus dialog box
@@ -236,6 +244,9 @@ addTimeForm.addEventListener("submit", function(event){
     initialTime += additionalSeconds;
     // use function to update timer
     updateTimerDisplay();
+    if (pauseButton.textContent === "Pause") {
+        startTimer()
+    }
     addTimeBox.close();
 });
 
@@ -270,11 +281,12 @@ function displayTask(task) {
     // show tasks on HTML table
     // creates new table row and table data
     const taskRow = document.createElement("tr");
+    // cell to hold name column
     const taskNameCell = document.createElement("td");
+    // cell to hold date column
     const taskDateCell = document.createElement("td");
-    const taskRecurringCell = document.createElement("td");
-    // cell to hold edit button
-    const taskActionsCell = document.createElement("td");
+    // cell to hold progress column (time spent)
+    const taskFocusCell = document.createElement("td");
     // edit button
     const editButton = document.createElement("button");
     editButton.textContent = "Edit";
@@ -283,18 +295,19 @@ function displayTask(task) {
     focusButton.textContent = "Focus";
     // places new row inside table body
     taskNameCell.textContent = task.name;
+    // places focus time spent into taskFocusCell with proper formatting using formatTime()
+    taskFocusCell.textContent =  formatTime(task.totalFocusTime);
     // changing date format
     const dateParts = task.date.split("-");
     const formattedDate = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
     taskDateCell.textContent = formattedDate;
-    taskRecurringCell.textContent = task.recurring;
     taskRow.appendChild(taskNameCell);
     taskRow.appendChild(taskDateCell);
-    taskRow.appendChild(taskRecurringCell);
-    taskActionsCell.appendChild(editButton);
-    taskActionsCell.appendChild(focusButton);
-    taskRow.appendChild(taskActionsCell);
-
+    taskRow.appendChild(taskFocusCell);
+    // edit button in task name column
+    taskNameCell.appendChild(editButton);
+    // focus button in progress column
+    taskFocusCell.appendChild(focusButton);
     taskTableBody.appendChild(taskRow);
 
     // when edit button is clicked
