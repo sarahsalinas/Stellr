@@ -369,12 +369,48 @@ function displayTask(task) {
 
     // when complete button is clicked
     completeButton.addEventListener("click", function(){
-        // sets whether it is completed to true
-        task.completed = true;
-        // saves updated task array to local storage
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        // refreshes page and now shows incomplete tasks
-        refreshTasks();
+        // if task is not recurring
+        if (task.recurring === "None") {
+            // sets whether it is completed to true
+            task.completed = true;
+            // saves updated task array to local storage
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            // refreshes page and now shows incomplete tasks
+            refreshTasks();
+        }
+        else {
+            // for recurring tasks
+            const nextDate = new Date(task.date);
+            // if tasks recurs daily
+            if (task.recurring === "Daily") {
+                // getUTCDate retrieves date and adds 1 day, update the Date object with new day using setUTCDate
+                nextDate.setUTCDate(nextDate.getUTCDate() + 1);
+            }
+            // if tasks recurs weekly
+            else if (task.recurring === "Weekly") {
+                // getUTCDate retrieves date and adds 7 days, update the Date object with new day using setUTCDate
+                nextDate.setUTCDate(nextDate.getUTCDate() + 7);
+            }
+            // if task recurs monthly
+            else if (task.recurring === "Monthly") {
+                // find last day of the following month
+                const lastDayOfNextMonth = new Date(Date.UTC(nextDate.getUTCFullYear(), nextDate.getUTCMonth() + 2, 0));
+                // retrieve the day of the month and place in variable last day
+                const lastDay = lastDayOfNextMonth.getUTCDate();
+                // use the user's original day selected unless the month doesn't have that many days, else use last available day
+                const targetDay = Math.min(task.originalDay, lastDay);
+                // changes nextDate to the 1st day of its current month
+                nextDate.setUTCDate(1);
+                 // getUTCMonth retrieves month, update the Date object with the next month using setUTCMonth
+                nextDate.setUTCMonth(nextDate.getUTCMonth() + 1);
+                // changes nextDate to targetDay after it rolls over to the next month
+                nextDate.setUTCDate(targetDay);
+            }
+            // nextDate.toISOString converts Date into String, .slice takes the 1st 10 characters and updates task's due date
+            task.date = nextDate.toISOString().slice(0,10);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            refreshTasks();
+        }
     });
 };
 
@@ -393,13 +429,19 @@ newTaskForm.addEventListener("submit", function(event){
         date: taskDate,
         recurring: recurring,
         totalFocusTime: 0,
-        completed: false
+        completed: false,
+        // keep track of date set on task
+        // split the fate into an array and retrieve the day
+        // Number() converts the day from a string into a number
+        originalDay: Number(taskDate.split("-")[2])
     };
 
     if (editingTask !== null){
         editingTask.name = taskName;
         editingTask.date = taskDate;
         editingTask.recurring = recurring;
+        // if task due date is edited, this will update the original day
+        editingTask.originalDay = Number(taskDate.split("-")[2]);
     }
     else {
         // placing new task into tasks array
