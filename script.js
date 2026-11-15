@@ -86,9 +86,19 @@ let timeRemaining = 0;
 let timerInterval = null;
 const timerCountDown = document.getElementById("timerCountDown");
 let initialTime = 0;
+const savedFocusSession = localStorage.getItem("focusSession");
+const loadedFocusSession = JSON.parse(savedFocusSession) || null;
+const focusSession = loadedFocusSession || {
+    // place to know which task is being focused on
+    taskId: null,
+    remainingTime: 0,
+    isPaused: false,
+    elapsedTime: 0,
+};
 
 focusForm.addEventListener("submit", function(event){
     event.preventDefault();
+    focusSession.taskId = focusingTask.id;
     focusTimerTaskName.textContent = focusingTask.name;
     const focusLengthInput = document.getElementById("focusLength");
     // store selected duration
@@ -105,6 +115,12 @@ focusForm.addEventListener("submit", function(event){
     //  timeRemaining = 60;
     timeRemaining = timerLength * 60;
     initialTime = timeRemaining;
+    focusSession.remainingTime = timeRemaining;
+    // reset elapsed time to 0 for focusSession
+    focusSession.elapsedTime = 0;
+    focusSession.isPaused = false;
+    // when focus session is started initial information is saved
+    localStorage.setItem("focusSession", JSON.stringify(focusSession));
     updateTimerDisplay();
     focusDialogBox.close();
     // makes sure it says pause instead of resume when new focus session starts
@@ -131,6 +147,9 @@ function startTimer() {
         const elapsedSeconds = (currentTime - startTime) / 1000;
         // update the countdown, rounds remaining seconds to whole number using Math.ceil, and prevents remaining time from being negative using Math.max
         timeRemaining = Math.max(0, Math.ceil(startTimeRemaining - elapsedSeconds));
+        focusSession.remainingTime = timeRemaining;
+        focusSession.elapsedTime = initialTime - timeRemaining;
+        localStorage.setItem("focusSession", JSON.stringify(focusSession));
         updateTimerDisplay();
         // stops time from counting down past 0
         if (timeRemaining <= 0) {
@@ -171,12 +190,16 @@ const pauseButton = document.getElementById("pause");
 pauseButton.addEventListener("click", function(){
     if (pauseButton.textContent === "Pause") {
         clearInterval(timerInterval);
+        focusSession.isPaused = true;
+        localStorage.setItem("focusSession", JSON.stringify(focusSession));
         // change button to say Resume
         pauseButton.textContent = "Resume";
     }
     else {
         startTimer();
         pauseButton.textContent = "Pause";
+        focusSession.isPaused = false;
+        localStorage.setItem("focusSession", JSON.stringify(focusSession));
     }
 });
 
@@ -200,6 +223,8 @@ endButton.addEventListener("click", function(){
     // adding time elapsed to totalFocusTime
     focusingTask.totalFocusTime += elapsedSeconds;
     localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.removeItem("focusSession");
+    focusSession.taskId = null;
     // refresh to update task data
     refreshTasks();
     // using formatTime() to properly display total time spent
@@ -249,6 +274,8 @@ addTimeForm.addEventListener("submit", function(event){
     timeRemaining += additionalSeconds;
     // update initial time as well so the timer wont reflect that you spent an inaccurate amount of time
     initialTime += additionalSeconds;
+    focusSession.remainingTime = timeRemaining;
+    localStorage.setItem("focusSession", JSON.stringify(focusSession));
     // use function to update timer
     updateTimerDisplay();
     if (pauseButton.textContent === "Pause") {
@@ -360,6 +387,8 @@ newTaskForm.addEventListener("submit", function(event){
 
     // object containing the pieces
     const newTask = {
+        // id to recognize which tasks belongs
+        id: crypto.randomUUID(),
         name: taskName,
         date: taskDate,
         recurring: recurring,
@@ -404,3 +433,21 @@ function refreshTasks(){
 
 // reloads
 refreshTasks();
+
+
+if (focusSession.taskId !== null) {
+    const foundTask = tasks.find(function(task) {
+        return task.id === focusSession.taskId;
+    });
+    if (foundTask) {
+        focusingTask = foundTask;
+        timeRemaining = focusSession.remainingTime;
+        initialTime = focusSession.elapsedTime + timeRemaining;
+        updateTimerDisplay();
+        focusTimer.hidden = false;
+        pauseButton.textContent = "Resume";
+        focusSession.isPaused = true;
+        localStorage.setItem("focusSession", JSON.stringify(focusSession));
+        focusTimerTaskName.textContent = focusingTask.name;
+    }
+}
