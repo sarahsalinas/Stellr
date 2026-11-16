@@ -8,8 +8,8 @@
         <link rel="stylesheet" href="styles.css">
         <!-- adobe font -->
         <link href="" rel="stylesheet">
-        <!-- my javascript -->
-        <!-- <script src="script.js" defer></script> -->
+        <script src="shared.js" defer></script>
+        <script src="progress.js" defer></script>
     </head>
     <body>
         <header>
@@ -28,7 +28,7 @@
         </header>
         <main>
             <section id="tasksCompleted">
-                <p><span id="numberCompleted">0</span> completed this month!</p>
+                <p><span id="numberCompleted">0</span> tasks completed this month!</p>
             </section>
             <table id="inProgressTable">
                 <thead>
@@ -38,7 +38,7 @@
                         <th><button type="button" id="progressTableButton" aria-label="in progress tasks toggle" aria-expanded="true">v</button></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="inProgressBody">
 
                 </tbody>
             </table>
@@ -51,7 +51,7 @@
                         <th><button type="button" id="completedTableButton" aria-label="completed tasks toggle" aria-expanded="true">v</button></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="completedBody">
 
                 </tbody>
             </table>

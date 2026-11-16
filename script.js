@@ -159,26 +159,6 @@ function startTimer() {
     }, 1000);
 };
 
-// function for time formatting calculations
-function formatTime(seconds) {
-    // 3600 seconds in 1 hour
-    const hours = Math.floor(seconds / 3600);
-    //  60 seconds in 1 minute and find remainder of 60 minutes in an hour
-    const minutes = Math.floor(seconds / 60) % 60;
-    // remainder after dividing 60 seconds
-    const remainingSeconds = seconds % 60;
-    // proper format 00:00 for minutes and seconds
-    const formattedMinutes = String(minutes).padStart(2, "0");
-    const formattedSeconds = String(remainingSeconds).padStart(2, "0");
-    // if-else statement for formatting when there is an hour vs minutes and seconds
-    if (hours > 0) {
-        return `${hours}:${formattedMinutes}:${formattedSeconds}`;
-    }
-    else {
-        return `${formattedMinutes}:${formattedSeconds}`;
-    };
-}
-
 // function that calls formatTime to update the timer
 function updateTimerDisplay() {
     timerCountDown.textContent = formatTime(timeRemaining);
@@ -333,7 +313,7 @@ function displayTask(task) {
     // places new row inside table body
     taskNameCell.textContent = task.name;
     // places focus time spent into taskFocusCell with proper formatting using formatTime()
-    taskFocusCell.textContent =  formatTime(task.totalFocusTime);
+    taskFocusCell.textContent = formatTime(task.totalFocusTime);
     // changing date format
     const dateParts = task.date.split("-");
     const formattedDate = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
@@ -373,6 +353,19 @@ function displayTask(task) {
         if (task.recurring === "None") {
             // sets whether it is completed to true
             task.completed = true;
+            const today = new Date();
+            // get month from Date and add 1 because months start at 0
+            const month = today.getMonth() + 1;
+            // get year
+            const year = today.getFullYear();
+            // get current day, convert to string, and add a 0 if needed
+            const formattedDay = String(today.getDate()).padStart(2, "0");
+            // convert month to string, and add a 0 if needed
+            const formattedMonth = String(month).padStart(2, "0");
+            // store date in YYYY-MM-DD format before formatting it for display on webpage
+            const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
+            // place formattedDate (date completed) into dateCompleted in task object
+            task.dateCompleted = formattedDate;
             // saves updated task array to local storage
             localStorage.setItem("tasks", JSON.stringify(tasks));
             // refreshes page and now shows incomplete tasks
@@ -414,6 +407,7 @@ function displayTask(task) {
     });
 };
 
+// new task submit
 newTaskForm.addEventListener("submit", function(event){
     // no reloading
     event.preventDefault();
@@ -433,7 +427,8 @@ newTaskForm.addEventListener("submit", function(event){
         // keep track of date set on task
         // split the fate into an array and retrieve the day
         // Number() converts the day from a string into a number
-        originalDay: Number(taskDate.split("-")[2])
+        originalDay: Number(taskDate.split("-")[2]),
+        dateCompleted: null
     };
 
     if (editingTask !== null){
