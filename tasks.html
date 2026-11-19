@@ -15,19 +15,24 @@
     </head>
     <body>
         <header>
-            <!-- placeholder image, change size in css later -->
-            <img src="images/froggie.png" alt="placeholder image of frog" width="40">
-            <button id="reset">Reset</button>
-            <nav>
+            <div id="reset-container">
+                <p>D</p>
+                <button id="reset">Reset</button>
+            </div>
+            <div id="nav-container-2">
+                <nav>
                 <!-- navigation with working links -->
-                <ul>
-                    <li><a href="index.html">Dashboard</a></li>
-                    <li><a href="tasks.html">Tasks</a></li>
-                    <li><a href="progress.html">Progress</a></li>
-                </ul>
-            </nav>
-           <h1> tasks</h1>
-           <img src="images/froggie.png" alt="placeholder image of frog" width="100">
+                    <ul>
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li><a href="tasks.html" class="active">Tasks</a></li>
+                        <li><a href="progress.html">Progress</a></li>
+                    </ul>
+               </nav>
+           </div>
+           <div id="page-header">
+            <h1> tasks</h1>
+            <p></p>
+           </div>
         </header>
         <main>
             <!-- NEW TASK -->
@@ -78,13 +83,21 @@
             </dialog>
             <!-- FOCUS TIMER SESSION BEGINS, INITIALLY HIDDEN -->
             <section id="focusTimer" hidden>
-                <img src="images/froggie.png" alt="placeholder image of frog" width="440" height="220">
-                <p>Time left for:</p>
-                <p id="focusTimerTaskName"></p>
-                <p id="timerCountDown">15:00</p>
-                <button type="button" id="pause" aria-label="pause focus timer">Pause</button>
-                <button type="button" id="end" aria-label="end focus timer">End</button>
-                <button type="button" id="addTime" aria-label="add more time to focus timer">Add Time</button>
+                <div id="focus-image">
+                    <img src="images/pixelart.png" alt="pixel art of a boy">
+                </div>
+                <div id="focus-banner">
+                    <p>Time left for:</p>
+                    <p id="focusTimerTaskName"></p>
+                </div>
+                <div id="time-count">
+                    <p id="timerCountDown">15:00</p>
+                </div>
+                <div id="focus-controls">
+                    <button type="button" id="pause" aria-label="pause focus timer">Pause</button>
+                    <button type="button" id="end" aria-label="end focus timer">End</button>
+                    <button type="button" id="addTime" aria-label="add more time to focus timer">Add Time</button>
+                </div>
                 <dialog id="addTimeBox">
                     <form id="addTimeForm">
                         <!-- ADD MORE TIME OPTION -->

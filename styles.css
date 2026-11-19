@@ -1,0 +1,473 @@
+@font-face {
+    font-family: "dogica";
+    src: url("fonts/dogica.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "dogicabold";
+    src: url("fonts/dogicabold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "emoji";
+    src: url("fonts/emoji.ttf") format("truetype");
+}
+
+:root {
+    --black: #000000;
+    --white: #FFFFFF;
+    --navy: #335497;
+    --lightpink: #F59BDE;
+    --darkpink: #A8007B;
+    /* navigation bar */
+    --babyblue: #84E9FF;
+    --teal: #00A1C4;
+    --gray: #303030;
+    /* dialog */
+    --lightgray: #D9D9D9;
+    --red: #FF4C4C;
+    --blue: #0040FF;
+    /* reset button */
+    --lightgreen: #77FA93;
+    --darkgreen: #355F41;
+    /* fonts */
+    --dogica: "dogica", Courier, monospace;
+    --dogicabold: "dogicabold", Courier, monospace;
+    --emoji: "emoji", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+body {
+    color: var(--white);
+    font-family: var(--dogica);
+    background-color: var(--navy);
+    margin: 0;
+}
+
+h1 {
+    color: var(--white);
+    font-family: var(--dogicabold);
+}
+
+/* reset button and img */
+#reset-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 25px 25px 0 0;
+}
+
+#reset {
+    color: var(--white);
+    padding: 11px 13px 11px 10px;
+    font-family: var(--dogica);
+    font-size: 11px;
+    border: none;
+    background: linear-gradient(
+        to right,
+        var(--lightgreen) -20%,
+        var(--darkgreen) 50%
+    );
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#reset::before {
+    content: "";
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    display: inline-block;
+    background: linear-gradient(
+        to bottom,
+        var(--white),
+        var(--navy)
+    );
+}
+
+#reset-container p {
+    font-family: var(--emoji);
+    font-size: 45px;
+    margin: 0;
+    /* move sparkle down a bit */
+    transform: translateY(3px);
+}
+
+/* dashboard greeting */
+#greeting-container {
+    text-transform: uppercase;
+    padding: 30px 0 25px 4%;
+}
+
+#pageGreeting {
+    font-size: 40px;
+}
+
+/* nav */
+#nav-container nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 50px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    padding: 9px 25px 9px 50px;
+    background: var(--gray);
+    border: 1px solid var(--white);
+    width: 88%;
+    border-left: none;
+    justify-content: space-between;
+}
+
+nav::after {
+    content: "";
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    background: linear-gradient(
+        to bottom,
+        var(--white),
+        var(--navy)
+    );
+}
+
+nav ul li a {
+    color: var(--white);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: var(--dogicabold);
+    font-size: 22px;
+}
+
+nav ul li a:hover {
+    color: var(--teal);
+}
+
+nav ul li a.active {
+    color: transparent;
+    background: linear-gradient(
+        to bottom,
+        var(--babyblue) 20%,
+        var(--black) 200%
+    );
+    -webkit-text-stroke: 1px var(--teal);
+    background-clip: text;
+}
+
+nav ul li a.active:hover {
+    color: var(--white);
+}
+
+
+/* task page */
+#page-header {
+    display: flex;
+    align-items: center;
+    padding: 30px 0 25px 6%;
+    margin-bottom: 5px;
+}
+
+#page-header h1 {
+    text-transform: uppercase;
+    font-family: var(--dogica);
+}
+
+#nav-container-2 nav {
+    margin-top: 40px;
+}
+
+#nav-container-2 nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 120px;
+}
+
+/* new task button */
+#newTask {
+    color: var(--white);
+    padding: 11px 17px 11px 15px;
+    font-family: var(--dogica);
+    font-size: 11px;
+    border: none;
+    background: linear-gradient(
+        to right,
+        var(--lightpink) 0%,
+        var(--darkpink) 45%
+    );
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 7rem;
+}
+
+#newTask::before {
+    content: "";
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    display: inline-block;
+    background: linear-gradient(
+        to bottom,
+        var(--white),
+        var(--navy)
+    );
+}
+
+#newTask:hover {
+    background: linear-gradient(
+        to right,
+        var(--babyblue),
+        var(--navy)
+    );
+    border: 1px solid var(--white);
+    cursor: pointer;
+}
+
+/* tasks */
+#tasksContainer {
+    padding: 60px 0 25px 0;
+}
+
+th {
+    font-family: var(--dogicabold);
+    text-align: left;
+    border-bottom: 1px solid var(--white);
+    padding-bottom: 25px;
+}
+
+#tasksContainer thead::after {
+    content: "";
+    display: table-row;
+    height: 30px;
+}
+
+#tasksContainer table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* targets name column */
+#tasksContainer th:nth-child(1) {
+    width: 40%;
+}
+
+#tasksContainer th:nth-child(2) {
+    width: 25%;
+}
+
+#tasksContainer th:nth-child(3) {
+    width: 35%;
+}
+
+#tasksContainer th:first-child,
+#tasksContainer td:first-child {
+    padding-left: 4%;
+}
+
+/* styling for table data cells */
+#tasksContainer td {
+    padding: 20px 0;   
+}
+
+#tasksContainer tbody tr:hover {
+    background: linear-gradient(
+        to right,
+        var(--lightpink) 0%,
+        var(--darkpink) 10%
+    ) 
+    0 1px / calc(88% + 74px) calc(100% - 2px) no-repeat,
+    linear-gradient(
+        var(--white),
+        var(--white)
+    )
+    0 0 / calc(88% + 75px) 100% no-repeat;
+}
+
+/* styling for task buttons */
+.focus-button {
+    background-image: url("images/clock.png");
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    right: 90px;
+    transform: translateY(calc(-50% + 7px));
+}
+
+.complete-button {
+    background-image: url("images/checkmark.png");
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+    margin-left: 25px;
+    position: absolute;
+    right: 40px;
+    transform: translateY(calc(-50% + 7px));
+}
+
+.edit-button {
+    margin-left: 25px;
+    background-image: url("images/pencil.png");
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+}
+
+.focus-button:hover, .complete-button:hover, .edit-button:hover {
+    cursor: pointer;
+    filter: brightness(80%);
+    filter: drop-shadow(0 0 10px var(--white));
+}
+
+
+/* focus timer */
+#focusTimer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--navy);
+    /* high just in case */
+    z-index: 10;
+}
+
+#focus-image {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+#focusTimer img {
+    padding-top: 30px;
+    width: 400px;
+    height: 400px;
+}
+
+#focus-banner {
+    display: flex;
+    gap: 10px;
+    padding: 9px 25px 9px 50px;
+    background: linear-gradient(
+        to right,
+        var(--lightpink) 0%,
+        var(--darkpink) 10%
+    ); 
+    border: 1px solid var(--white);
+    width: 88%;
+    border-left: none;
+}
+
+#focusTimerTaskName, #timerCountDown {
+    font-family: var(--dogicabold);
+}
+
+#time-count {
+    display: flex;
+    justify-content: center;
+}
+
+#timerCountDown {
+    font-size: 5rem;
+}
+
+#focus-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+#pause, #end, #addTime {
+    color: var(--black);
+    width: 200px;
+    height: 90px;
+    padding: 20px;
+    font-family: var(--dogica);
+    text-transform: uppercase;
+    font-size: 12px;
+    background: var(--lightgray);
+    cursor: pointer;
+    box-shadow:  0 -3px 3.9px 5px rgba(0, 0, 0, 0.57) inset, 13px 13px 7.7px 1px rgba(255, 255, 255, 0.89) inset;
+}
+
+#focus-controls button:hover {
+    filter: brightness(90%);
+}
+
+#focus-controls button:active {
+    transform: translateY(2px);
+    filter: brightness(80%);
+}
+
+/* progress page */
+#tasksCompleted {
+    display: flex;
+    gap: 10px;
+    padding: 4px 25px 4px 50px;
+    background: linear-gradient(
+        to right,
+        var(--lightpink) 0%,
+        var(--darkpink) 10%
+    );
+    width: 30%;
+    border-left: none;
+}
+
+#inProgressTable, #completedTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 70px;
+}
+
+#inProgressTable th:nth-child(1), #completedTable th:nth-child(1) {
+    width: 40%;
+}
+
+#inProgressTable th:first-child, #inProgressTable td:first-child, #completedTable th:first-child, #completedTable td:first-child {
+    padding-left: 4%;
+}
+
+#inProgressTable td, #completedTable td {
+    padding: 25px 0;   
+}
+
+#inProgressTable th:last-child, #completedTable th:last-child {
+    text-align: right;
+    padding-right: 4%;
+    width: 8%;
+}
+
+/* collapsible buttons */
+#progressTableButton, #completedTableButton {
+    background-color: transparent;
+    border: none;
+    color: var(--white);
+    font-family: var(--dogicabold);
+    cursor: pointer;
+}
+
+#progressTableButton:hover, #completedTableButton:hover {
+    /* color: var(--gray); */
+    text-shadow: 0 0 25px var(--white);
+} 

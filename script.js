@@ -303,13 +303,16 @@ function displayTask(task) {
     const taskFocusCell = document.createElement("td");
     // edit button
     const editButton = document.createElement("button");
-    editButton.textContent = "Edit";
+    editButton.classList.add("edit-button");
+    editButton.setAttribute("aria-label", "Edit");
     // focus button
     const focusButton = document.createElement("button");
-    focusButton.textContent = "Focus";
+    focusButton.classList.add("focus-button");
+    focusButton.setAttribute("aria-label", "Focus");
     // complete button
     const completeButton = document.createElement("button");
-    completeButton.textContent = "Complete";
+    completeButton.classList.add("complete-button");
+    completeButton.setAttribute("aria-label", "Complete");
     // places new row inside table body
     taskNameCell.textContent = task.name;
     // places focus time spent into taskFocusCell with proper formatting using formatTime()
