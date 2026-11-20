@@ -1,5 +1,16 @@
 /* dashboard page javascript */
 
+// emoji changes
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// generate random number between 0 and 51
+const randomIndex = Math.floor(Math.random() * letters.length);
+// place letter from letters using randomIndex into randomLetter 
+const randomLetter = letters[randomIndex];
+const randomEmoji = document.getElementById("randomEmoji");
+randomEmoji.textContent = randomLetter;
+
 const savedTasks = localStorage.getItem("tasks");
 // place savedTasks back into an array and includes OR operator so it doesn't return null
 const loadedTasks = JSON.parse(savedTasks) || [];

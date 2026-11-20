@@ -38,7 +38,24 @@ if (namePromptForm) {
     const name = document.getElementById("name").value.trim();
     if (name !== "") {
         localStorage.setItem("userName", name);
+        updateGreeting(name);
         namePromptDialog.close();   
     }
     });
+}
+
+// name display on all pages
+
+// reusable function to update greeting
+function updateGreeting(name) {
+    const pageGreeting = document.getElementById("pageGreeting");
+    // if pageGreeting element exists..
+    if (pageGreeting) {
+        pageGreeting.textContent = `Welcome to Stellr, ${name}!`;
+    };
+}
+
+// if savedName exists..
+if (savedName !== null) {
+    updateGreeting(savedName);
 }
