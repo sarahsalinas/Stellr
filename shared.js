@@ -19,3 +19,26 @@ function formatTime(seconds) {
         return `${formattedMinutes}:${formattedSeconds}`;
     };
 }
+
+// personalization functionality
+// check if theres name in localStorage
+const savedName = localStorage.getItem("userName");
+const namePromptDialog = document.getElementById("namePromptDialog");
+const namePromptForm = document.getElementById("namePrompt");
+
+// checks if dialog exists and if name is in localStorage
+if (namePromptDialog && savedName === null) {
+    namePromptDialog.showModal();
+}
+
+if (namePromptForm) {
+    // when user clicks enter
+    namePromptForm.addEventListener("submit", function(event){
+    event.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    if (name !== "") {
+        localStorage.setItem("userName", name);
+        namePromptDialog.close();   
+    }
+    });
+}
