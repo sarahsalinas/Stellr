@@ -43,7 +43,7 @@ body {
     margin: 0;
 }
 
-#randomEmoji {
+#taskEmoji, #randomEmoji, #progressEmoji {
     font-family: var(--emoji);
     font-size: 50px;
 }

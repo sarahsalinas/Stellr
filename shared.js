@@ -44,8 +44,6 @@ if (namePromptForm) {
     });
 }
 
-// name display on all pages
-
 // reusable function to update greeting
 function updateGreeting(name) {
     const pageGreeting = document.getElementById("pageGreeting");
@@ -59,3 +57,23 @@ function updateGreeting(name) {
 if (savedName !== null) {
     updateGreeting(savedName);
 }
+
+// reset button
+const reset = document.getElementById("reset");
+const resetDialog = document.getElementById("resetDialog");
+const resetButton = document.getElementById("resetConfirm");
+const cancelReset = document.getElementById("cancelReset");
+
+reset.addEventListener("click", function(){
+    resetDialog.showModal();
+});
+
+resetButton.addEventListener("click", function(){
+    localStorage.removeItem('userName');
+    localStorage.removeItem('tasks');
+    window.location.href = "index.html";
+});
+
+cancelReset.addEventListener("click", function(){
+    resetDialog.close();
+});

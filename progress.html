@@ -16,6 +16,13 @@
                 <p>D</p>
                 <button id="reset">Reset</button>
             </div>
+             <!-- reset dialog -->
+             <dialog id="resetDialog">
+                <h2>Reset Stellr?</h2>
+                <p>All tasks and progress will be deleted. This cannot be undone!</p>
+                <button type="button" id="resetConfirm">Reset</button>
+                <button type="button" id="cancelReset">Cancel</button>
+            </dialog>
             <div id="nav-container-2">
                 <nav>
                 <!-- navigation with working links -->
@@ -27,8 +34,8 @@
                </nav>
            </div>
             <div id="page-header">
-            <h1> progress</h1>
-            <p></p>
+            <h1 id="progressGreeting"> progress</h1>
+            <p id="progressEmoji"></p>
            </div>
         </header>
         <main>

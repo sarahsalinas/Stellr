@@ -1,4 +1,16 @@
 
+// task page greeting
+const taskGreeting = document.getElementById("taskGreeting");
+taskGreeting.textContent = `${savedName}'s tasks `;
+const taskEmoji = document.getElementById("taskEmoji");
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+// generate random number between 0 and 51
+const randomIndex = Math.floor(Math.random() * letters.length);
+// place letter from letters using randomIndex into randomLetter 
+const randomLetter = letters[randomIndex];
+taskEmoji.textContent = randomLetter;
+
+
 // new task button
 const newTaskButton = document.getElementById("newTask");
 
@@ -265,6 +277,7 @@ addTimeForm.addEventListener("submit", function(event){
 });
 
 
+
 // place string into savedTasks
 const savedTasks = localStorage.getItem("tasks");
 // place savedTasks back into an array and includes OR operator so it doesn't return null
@@ -350,63 +363,77 @@ function displayTask(task) {
         focusModeTaskName.textContent = task.name;
     });
 
+    const completeTaskConfirmDialog = document.getElementById("completeTaskConfirmDialog");
+    const completeConfirmButton = document.getElementById("completeConfirm");
+    const cancelCompleteButton = document.getElementById("cancelComplete");
+
     // when complete button is clicked
     completeButton.addEventListener("click", function(){
-        // if task is not recurring
-        if (task.recurring === "None") {
-            // sets whether it is completed to true
-            task.completed = true;
-            const today = new Date();
-            // get month from Date and add 1 because months start at 0
-            const month = today.getMonth() + 1;
-            // get year
-            const year = today.getFullYear();
-            // get current day, convert to string, and add a 0 if needed
-            const formattedDay = String(today.getDate()).padStart(2, "0");
-            // convert month to string, and add a 0 if needed
-            const formattedMonth = String(month).padStart(2, "0");
-            // store date in YYYY-MM-DD format before formatting it for display on webpage
-            const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
-            // place formattedDate (date completed) into dateCompleted in task object
-            task.dateCompleted = formattedDate;
-            // saves updated task array to local storage
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            // refreshes page and now shows incomplete tasks
-            refreshTasks();
-        }
-        else {
-            // for recurring tasks
-            const nextDate = new Date(task.date);
-            // if tasks recurs daily
-            if (task.recurring === "Daily") {
-                // getUTCDate retrieves date and adds 1 day, update the Date object with new day using setUTCDate
-                nextDate.setUTCDate(nextDate.getUTCDate() + 1);
+        completeTaskConfirmDialog.showModal()
+        // confirm complete task
+        completeConfirmButton.addEventListener("click", function(){
+            // if task is not recurring
+            if (task.recurring === "None") {
+                // sets whether it is completed to true
+                task.completed = true;
+                const today = new Date();
+                // get month from Date and add 1 because months start at 0
+                const month = today.getMonth() + 1;
+                // get year
+                const year = today.getFullYear();
+                // get current day, convert to string, and add a 0 if needed
+                const formattedDay = String(today.getDate()).padStart(2, "0");
+                // convert month to string, and add a 0 if needed
+                const formattedMonth = String(month).padStart(2, "0");
+                // store date in YYYY-MM-DD format before formatting it for display on webpage
+                const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
+                // place formattedDate (date completed) into dateCompleted in task object
+                task.dateCompleted = formattedDate;
+                // saves updated task array to local storage
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                // refreshes page and now shows incomplete tasks
+                refreshTasks();
             }
-            // if tasks recurs weekly
-            else if (task.recurring === "Weekly") {
-                // getUTCDate retrieves date and adds 7 days, update the Date object with new day using setUTCDate
-                nextDate.setUTCDate(nextDate.getUTCDate() + 7);
+            else {
+                // for recurring tasks
+                const nextDate = new Date(task.date);
+                // if tasks recurs daily
+                if (task.recurring === "Daily") {
+                    // getUTCDate retrieves date and adds 1 day, update the Date object with new day using setUTCDate
+                    nextDate.setUTCDate(nextDate.getUTCDate() + 1);
+                }
+                // if tasks recurs weekly
+                else if (task.recurring === "Weekly") {
+                    // getUTCDate retrieves date and adds 7 days, update the Date object with new day using setUTCDate
+                    nextDate.setUTCDate(nextDate.getUTCDate() + 7);
+                }
+                // if task recurs monthly
+                else if (task.recurring === "Monthly") {
+                    // find last day of the following month
+                    const lastDayOfNextMonth = new Date(Date.UTC(nextDate.getUTCFullYear(), nextDate.getUTCMonth() + 2, 0));
+                    // retrieve the day of the month and place in variable last day
+                    const lastDay = lastDayOfNextMonth.getUTCDate();
+                    // use the user's original day selected unless the month doesn't have that many days, else use last available day
+                    const targetDay = Math.min(task.originalDay, lastDay);
+                    // changes nextDate to the 1st day of its current month
+                    nextDate.setUTCDate(1);
+                     // getUTCMonth retrieves month, update the Date object with the next month using setUTCMonth
+                    nextDate.setUTCMonth(nextDate.getUTCMonth() + 1);
+                    // changes nextDate to targetDay after it rolls over to the next month
+                    nextDate.setUTCDate(targetDay);
+                }
+                // nextDate.toISOString converts Date into String, .slice takes the 1st 10 characters and updates task's due date
+                task.date = nextDate.toISOString().slice(0,10);
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                refreshTasks();
             }
-            // if task recurs monthly
-            else if (task.recurring === "Monthly") {
-                // find last day of the following month
-                const lastDayOfNextMonth = new Date(Date.UTC(nextDate.getUTCFullYear(), nextDate.getUTCMonth() + 2, 0));
-                // retrieve the day of the month and place in variable last day
-                const lastDay = lastDayOfNextMonth.getUTCDate();
-                // use the user's original day selected unless the month doesn't have that many days, else use last available day
-                const targetDay = Math.min(task.originalDay, lastDay);
-                // changes nextDate to the 1st day of its current month
-                nextDate.setUTCDate(1);
-                 // getUTCMonth retrieves month, update the Date object with the next month using setUTCMonth
-                nextDate.setUTCMonth(nextDate.getUTCMonth() + 1);
-                // changes nextDate to targetDay after it rolls over to the next month
-                nextDate.setUTCDate(targetDay);
-            }
-            // nextDate.toISOString converts Date into String, .slice takes the 1st 10 characters and updates task's due date
-            task.date = nextDate.toISOString().slice(0,10);
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            refreshTasks();
-        }
+            completeTaskConfirmDialog.close();
+        });
+
+        cancelCompleteButton.addEventListener("click", function() {
+            completeTaskConfirmDialog.close();
+        });
+        
     });
 };
 

@@ -17,6 +17,13 @@
                 <p>D</p>
                 <button id="reset">Reset</button>
             </div>
+             <!-- reset dialog -->
+             <dialog id="resetDialog">
+                <h2>Reset Stellr?</h2>
+                <p>All tasks and progress will be deleted. This cannot be undone!</p>
+                <button type="button" id="resetConfirm">Reset</button>
+                <button type="button" id="cancelReset">Cancel</button>
+            </dialog>
             <div id="nav-container-2">
                 <nav>
                 <!-- navigation with working links -->
@@ -28,7 +35,8 @@
                </nav>
            </div>
            <div id="page-header">
-            <h1> tasks</h1>
+            <h1 id="taskGreeting"> tasks</h1>
+            <p id="taskEmoji"></p>
             <p></p>
            </div>
         </header>
@@ -122,6 +130,12 @@
                 <p id="completeFocusTask"></p>
                 <p id="totalTimeSpent"></p>
                 <input type="button" id="closeFinishedFocusButton2" value="Close">
+            </dialog>
+            <dialog id="completeTaskConfirmDialog">
+                <h3>Complete Task?</h3>
+                <p>You won't be able to retrieve or make progress on it anymore!</p>
+                <button type="button" id="completeConfirm">Complete</button>
+                <button type="button" id="cancelComplete">Cancel</button>
             </dialog>
             <!-- TASKS CREATED -->
             <section id="tasksContainer">
